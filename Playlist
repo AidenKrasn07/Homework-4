@@ -1,1 +1,182 @@
-
+import java.util.Deque;
+import java.util.ArrayDeque;
+class Song {
+    String title;
+    String artist;
+    Song (String title, String artist) {
+        this.title = title;
+        this.artist = artist;
+    }
+}
+public class Playlist {
+    class Node {
+        Song song;
+        Node next;
+        Node prev;
+        String id;
+        int playCounter = 0;
+        Node (Song name, String id) {
+            this.song = name;
+            this.next = null;
+            this.prev = null;
+            this.id = id;
+        }
+    }    
+    Deque<String> queue = new ArrayDeque<>();
+    History history = new History(100);
+    Node head;
+    Node tail;
+    Node currentTitle;
+    Playlist () {
+        head = null;
+        tail = null;
+        queue = new ArrayDeque<>();
+        currentTitle = null;
+    }
+    public boolean addSong (String id, String title, String artist) {
+        Song s = new Song (title, artist);
+        Node newNode = new Node (s, id);
+        if (head == null) {
+            head = newNode;
+            tail = newNode;
+            return true;
+        }
+        Node current = head;
+        while (current != null) {
+            if (id.equals(current.id)) {
+                return false;
+            }
+            current = current.next;
+        }
+        tail.next = newNode;
+        newNode.prev = tail;
+        tail = newNode;
+        return true;
+    }
+    public String findSong (String id) {
+        Node current = head;
+        while (current != null) {
+            if (id.equals(current.id)) 
+                return current.song.title;
+            current = current.next;
+        }
+        return null;
+    }
+    public String showPlaylist () {
+        String temp = "";
+        Node current = head;
+        if (current != null) {
+            temp += current.song.title;
+            while (current.next != null) {
+                current = current.next;
+                temp += ", " + current.song.title;
+            }
+        }
+        return temp;
+    }
+    public String play (String id) {
+        Node current = head;
+        while (current != null) {
+            if (id.equals(current.id)) {
+                currentTitle = current;
+                current.playCounter++;
+                return current.song.title;
+            }
+            current = current.next;
+        }
+        return null;
+    }
+    public String nowPlaying () {
+        if (currentTitle != null) {
+            return currentTitle.song.title;
+        }
+        return null;
+    }
+    public int playCount (String id) {
+        Node current = head;
+        while (current != null) {
+            if (id.equals(current.id)) 
+                return current.playCounter;
+            current = current.next;
+        }
+        return 0;
+    }
+    public String next () {
+        if (currentTitle != null) {    
+            if (queue.isEmpty()) {
+                if (currentTitle.next != null) {
+                    history.push(currentTitle.id, currentTitle.song.title);
+                    return play(currentTitle.next.id);
+                }   
+            }    
+            else {
+                history.push(currentTitle.id, currentTitle.song.title);
+                String temp = play(queue.getFirst());
+                queue.removeFirst();
+                return temp;
+            }
+        }     
+        return null;
+    }
+    public String back () {
+        if (currentTitle != null) {
+            if (!history.isEmpty()){
+                queueNext(currentTitle.id);
+                return play(history.pop());
+            }
+        }    
+        return null;
+    }
+    public boolean queueLater(String id) {
+        if (findSong(id) != null){
+            queue.addLast(id);
+            return true;
+        }    
+        return false;
+    }
+    public boolean queueNext(String id) {
+        if (findSong(id) != null){
+            queue.addFirst(id);
+            return true;
+        }    
+        return false;
+    }
+    public String showUpNext() {
+        String temp = "";
+        for (String id : queue) {
+            temp += findSong(id) + ", ";
+        }
+        if (temp.length() > 1) {
+            temp = temp.substring(0, temp.length() - 2);
+        }
+        return temp;
+    }
+    public boolean removeSong(String id) {
+        Node current = head;
+        if (!id.equals(currentTitle.id)) {
+            while (current != null) {
+                if (id.equals(current.id)) {
+                    if (current.prev != null) 
+                        current.prev.next = current.next;
+                    else 
+                        head = current.next;
+                    if (current.next != null)
+                        current.next.prev = current.prev;
+                    else
+                        tail = current.prev;
+                    if (queue.contains(id))
+                        queue.remove(id);
+                    return true;
+                }
+                current = current.next;
+            }
+        }    
+        return false;    
+    }
+    public void clearPlaylist() {
+        head = null;
+        tail = null;
+        currentTitle = null;
+        queue.clear();
+    }
+}
