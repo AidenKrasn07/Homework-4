@@ -1,1 +1,44 @@
-
+import java.util.HashMap;
+class Song {
+    String title;
+    String artist;
+    Song (String title, String artist) {
+        this.title = title;
+        this.artist = artist;
+    }
+}
+public class Library {
+    HashMap<String, Song> map = new HashMap<>();
+    public boolean add (String id, String title, String artist) {
+        if (!map.containsKey(id)) {
+            Song s = new Song (title, artist);
+            map.put(id, s);
+            return true;
+        }
+        return false;
+    }
+    public String find (String id) {
+        Song s = map.get(id);
+        if (s != null) {
+            return s.title;
+        }
+        return null;
+    }
+    public boolean remove(String id) {
+        return map.remove(id) != null;
+    }
+    public String showLibrary() {
+        String temp = "";
+        for (String id : map.keySet()) {
+            Song s = map.get(id);
+            temp += id + ": " + s.title + " by " + s.artist + ", ";
+        }
+        if (temp.length() > 0) {
+            temp = temp.substring(0, temp.length() - 2);
+        }
+        return temp;
+    }
+    public void clear() {
+        map.clear();
+    }
+}
