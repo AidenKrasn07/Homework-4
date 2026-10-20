@@ -1,1 +1,38 @@
+public class History {
+    private String [] titles;
+    private String [] ids;
+    private int top;
+    private int capacity;
 
+    public History(int size) {
+        titles = new String[size];
+        ids = new String[size];
+        capacity = size;
+        top = -1;
+    } 
+    //Stack Methods
+    public void push(String id, String title) {
+        top++;
+        ids [top] = id;
+        titles [top] = title;
+    }
+    public String pop() {
+        String temp = ids [top];
+        top--;
+       return temp;
+    }
+    public String peek() {
+        return ids [top];
+    }
+    public boolean isEmpty() {
+        return (top == -1);
+    }    
+    public String showHistory() {
+        String temp = "";
+        temp += titles [top];
+        for (int i = top - 1; i >= 0; i--) {
+            temp += ", " + titles [i];
+        }
+        return temp;
+    }
+}
