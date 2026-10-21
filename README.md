@@ -46,7 +46,7 @@ Deque
 Hash Map
 • I used a HashMap for the library because each song has a unique ID that I can use as a key to quickly find the song. Adding, finding, and removing a song are O(1) on average, which is much faster than searching through the playlist with a linked list.
 
-• If I used a plain array, I would have to search through the array to find a song, so it would be slower.
+• If I used a plain array, I would have to search through the array to find a song unless I built my own hashing system, so it would be slower.
 
 • I used Java's built-in HashMap because it already handles the hashing and storage for me instead of requiring me to implement a hash table from scratch.
 
