@@ -41,4 +41,14 @@ public class Library {
     public void clear() {
         map.clear();
     }
+    public String findSong(String title) {
+        for (String id : map.keySet()) {
+            Song s = map.get(id);
+
+            if (s.title.equals(title)) {
+                return id;
+            }
+        }
+        return null;
+    }
 }
