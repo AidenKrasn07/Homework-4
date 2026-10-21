@@ -1,13 +1,20 @@
 public class MusicPlayer {
     public static void main(String[] args) throws Exception {
-        String [] songTitles = {"Night Drive", "Slow Tide", "Copper Sky", "Static Bloom", "Low Orbit", "Glass Rivers"};
-        String [] artists = {"Wilee", "IDID", "Ionara", "Nekta", "Jobii", "Willow Mae"};
+        String [] songTitlesLib = {"Night Drive", "Slow Tide", "Copper Sky", "Static Bloom", "Low Orbit", "Glass Rivers", "Falling", "The Last Time", "The End of the World", "The Beginning of the End"};
+        String [] artistsLib = {"Wilee", "IDID", "Ionara", "Nekta", "Jobii", "Willow Mae", "Lemaitre", "Koda", "Elohim", "The Midnight"};
+        String [] songTitlesPlay = {"Night Drive", "Slow Tide", "Copper Sky", "Static Bloom", "Low Orbit", "Glass Rivers"};
+        String [] artistsPlay = {"Wilee", "IDID", "Ionara", "Nekta", "Jobii", "Willow Mae"};
         Playlist myPlaylist = new Playlist ();
         Library myLibrary = new Library ();
         System.out.println("--- 1. Build the playlist ---");
-        for (int i = 0; i < songTitles.length; i++) {
-            System.out.println(myPlaylist.addSong("s" + (i+1), songTitles [i], artists [i]));
-            myLibrary.add("s" + (i+1), songTitles [i], artists [i]);
+        for (int i = 0; i < songTitlesLib.length; i++) {
+            myLibrary.add("s" + (i+1), songTitlesLib [i], artistsLib [i]);
+        }
+        for (int i = 0; i < songTitlesPlay.length; i++) {
+            String id = myLibrary.findSong(songTitlesPlay [i]);
+            if (id != null) {
+                System.out.println(myPlaylist.addSong(id, songTitlesPlay [i], artistsPlay [i]));
+            }
         }
         if (myPlaylist.addSong("s3", "Copper Sky", "Ionara")) {
             System.out.println("Song added successfully.");
